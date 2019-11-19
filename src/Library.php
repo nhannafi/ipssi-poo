@@ -17,16 +17,5 @@ class Library
         $this->books = $books;
     }
 
-    public function provideBookTo(Member $member, int $nbr_expl)
-    {
-        foreach ($this->books as $book) {
-            /** @var Book $book */
-            $book = $book->loanIfSuitable($name, $nbr_expl);
-
-            if ($name !== null) {
-                $member->setBookName($bookName);
-                break;
-            }
-        }
-    }
+    
 }

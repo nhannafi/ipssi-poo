@@ -4,39 +4,34 @@ namespace Ipssi\Evaluation;
 
 class Book 
 {
-        /** @var int */
-        private $loaned_days;
+        public const loaned_days = 15;
         
         /** @var int */
         private $nbr_expl;
     
-        /** @var bool */
-        private $loaned;
-    
         /** @var string */
-        private $name;
-        
+        public $name;
 
-        public function __construct( string $name, int $nbr_expl,  int $loaned_days)
+        /** @var string*/
+        public $loanedDate;
+
+        public function __construct( string $name, int $nbr_expl,  $loanedDate)
         {
             $this->name = $name;
             $this->nbr_expl = $nbr_expl;
-            $this->loaned_days = $loaned_days;
-            $this->loaned = false;
+            $this->loanedDate = new \DateTime($loanedDate);
         }
     
-        public function loanIfSuitable(string $name, int $nbr_expl,  int $loaned_day): ?int
+        public function isAvailableBook(): bool
         {
-            if ($this->loaned && $this->nbr_expl = 0 ) {
-                return null;
+            if ( $this->nbr_expl > 0 ) {
+                return true;
+                
             }
-    
-            if ($this->name === $name   &&  $this->loaned_days < 15) {
-                $this->loaned = true;
-                return $this->name;
+            else {
+                return false;
+                echo "this book is a unique exemplaire";
             }
-    
-            return null;
         }
 
 }

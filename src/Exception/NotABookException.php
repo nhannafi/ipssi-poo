@@ -8,6 +8,7 @@ class NotABookException extends LibraryException
 
     public function __construct($givenData)
     {
+        parent::__construct();
         $this->givenData = $givenData;
     }
 

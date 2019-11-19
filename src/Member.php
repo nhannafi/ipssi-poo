@@ -3,37 +3,54 @@
 namespace Ipssi\Evaluation;
 
 class Member
-{ 
-    /** @var string */
-    private $claimedBookName;
+{
+    /** @var array */
+    public $listBook;
 
-    /** @var int */
-    private $bookName;
-
-    public function __construct(string $claimedBookName)
+    public function __construct(array $listBook)
     {
-        $this->claimedBookName = $claimedBookName;
+        $this->listBook = $listBook;
+    }
+    public function isValidloanBook(): bool
+    {
+        if( sizeof($this->listBook)==0)
+        return true;
+
+        $dateNow = new \DateTime('now');
+        
+        if (is_array($this->listBook))
+        {
+            foreach($this->listBook as $book) { 
+                $loanDate= $book->loanedDate;
+               //difference between two dates
+               $interval = $dateNow->diff($loanDate);
+                $diffDays= substr($interval->format(' %a days '),1,\strpos(" ",$interval->format(' %a days ')));
+                if (intval($diffDays)>15){
+                    return false;
+                    break;
+                }
+                
+            }
+
+    }
+    return true;  
+    }
+   
+    public function loanBook(Book $book)
+    {
+      
+       if($this->isValidloanBook() && $book->isAvailableBook() ){
+        array_push($this->listBook, $book);
+        echo "The book"." $book->name"." added successfully. \n"; 
+       }
+       else{
+        echo "Sorry, you can't loan " ." $book->name";
+       }
+       
+     
     }
 
-    public function orderBookTo(Library $library)
-    {
-        $library->provideBookTo($this, $this->claimedBookName );
-    }
-
-    public function setBookName(int $bookName): self
-    {
-        $this->bookName = $bookName;
-
-        return $this;
-    }
-
-    public function doYouHaveABook(): string
-    {
-        if (null === $this->bookName) {
-            return "No, I must claim a book somewhere";
-        }
-
-        return "Yes, I have the book name " . $this->bookName;
-    }
+   
+  
 
 }
